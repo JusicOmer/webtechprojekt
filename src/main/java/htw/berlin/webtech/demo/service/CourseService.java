@@ -3,7 +3,7 @@ package htw.berlin.webtech.demo.service;
 import htw.berlin.webtech.demo.persistence.CourseEntity;
 import htw.berlin.webtech.demo.persistence.CourseRepository;
 import htw.berlin.webtech.demo.web.api.Course;
-import htw.berlin.webtech.demo.web.api.CourseCreateRequest;
+import htw.berlin.webtech.demo.web.api.CourseManipulationRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,10 +30,32 @@ public class CourseService {
         return courseEntity.map(this::transformEntity).orElse(null);
     }
 
-    public Course create(CourseCreateRequest request){
+    public Course create(CourseManipulationRequest request){
         var courseEntity = new CourseEntity(request.getName(), request.getDay(), request.getStart(), request.getEnde());
         courseEntity = courseRepository.save(courseEntity);
         return transformEntity(courseEntity);
+    }
+
+    public Course update(Long id, CourseManipulationRequest request){
+        var courseEntityOptional = courseRepository.findById(id);
+        if (courseEntityOptional.isEmpty()) return null;
+
+        var courseEntity = courseEntityOptional.get();
+        courseEntity.setDay(request.getDay());
+        courseEntity.setEnde(request.getEnde());
+        courseEntity.setName(request.getName());
+        courseEntity.setStart(request.getStart());
+
+        return transformEntity(courseEntity);
+    }
+
+    public boolean deleteById(Long id){
+        if(!courseRepository.existsById(id)) {
+            return false;
+        }
+
+        courseRepository.deleteById(id);
+        return true;
     }
 
     private Course transformEntity(CourseEntity courseEntity){

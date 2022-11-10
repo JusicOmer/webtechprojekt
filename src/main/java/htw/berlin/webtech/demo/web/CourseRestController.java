@@ -2,7 +2,7 @@ package htw.berlin.webtech.demo.web;
 
 import htw.berlin.webtech.demo.service.CourseService;
 import htw.berlin.webtech.demo.web.api.Course;
-import htw.berlin.webtech.demo.web.api.CourseCreateRequest;
+import htw.berlin.webtech.demo.web.api.CourseManipulationRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,9 +40,21 @@ public class CourseRestController {
     }
 
     @PostMapping(path = "/api/v1/courses")
-    public ResponseEntity<List<Course>> createCourses(@RequestBody CourseCreateRequest request) throws URISyntaxException {
+    public ResponseEntity<List<Course>> createCourses(@RequestBody CourseManipulationRequest request) throws URISyntaxException {
         var course = courseService.create(request);
         URI uri = new URI("/api/v1/courses" + course.getId());
         return ResponseEntity.created(uri).build();
+    }
+
+    @PutMapping(path = "/api/v1/courses/{id}")
+    public ResponseEntity<Course> updateCourse(@PathVariable Long id, @RequestBody CourseManipulationRequest request){
+        var course = courseService.update(id, request);
+        return course != null ? ResponseEntity.ok(course) : ResponseEntity.notFound().build();
+    }
+
+    @DeleteMapping(path = "/api/v1/courses/{id}")
+    public ResponseEntity<Void> deleteCourse(@PathVariable Long id){
+        boolean successful = courseService.deleteById(id);
+        return successful ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
     }
 }

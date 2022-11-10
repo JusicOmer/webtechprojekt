@@ -2,13 +2,13 @@ package htw.berlin.webtech.demo.web.api;
 
 import java.time.LocalTime;
 
-public class CourseCreateRequest {
+public class CourseManipulationRequest {
     private String name;
     private Day day;
     private LocalTime start;
     private LocalTime ende;
 
-    public CourseCreateRequest(String name, Day day, LocalTime start, LocalTime ende) {
+    public CourseManipulationRequest(String name, Day day, LocalTime start, LocalTime ende) {
         this.name = name;
         this.day = day;
         this.start = start;
