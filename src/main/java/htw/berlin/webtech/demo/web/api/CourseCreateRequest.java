@@ -1,43 +1,18 @@
-package htw.berlin.webtech.demo.persistence;
+package htw.berlin.webtech.demo.web.api;
 
-import htw.berlin.webtech.demo.web.api.Day;
-
-import javax.persistence.*;
 import java.time.LocalTime;
 
-@Entity(name  = "courses")
-public class CourseEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private long id;
-
-    @Column(name = "name", nullable = false)
+public class CourseCreateRequest {
     private String name;
-
-    @Column(name = "day", nullable = false)
     private Day day;
-
-    @Column(name = "start", nullable = false)
     private LocalTime start;
-
-    @Column(name = "ende", nullable = false)
     private LocalTime ende;
 
-    public CourseEntity(String name, Day day, LocalTime start, LocalTime ende) {
+    public CourseCreateRequest(String name, Day day, LocalTime start, LocalTime ende) {
         this.name = name;
         this.day = day;
         this.start = start;
         this.ende = ende;
-    }
-
-    protected CourseEntity(){
-
-    }
-
-    public long getId() {
-        return id;
     }
 
     public String getName() {
