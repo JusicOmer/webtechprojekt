@@ -1,15 +1,31 @@
-package htw.berlin.webtech.demo.web.api;
+package htw.berlin.webtech.demo.persistence;
 
+import htw.berlin.webtech.demo.web.api.Day;
+
+import javax.persistence.*;
 import java.time.LocalTime;
 
-public class Course {
+@Entity(name  = "courses")
+public class CourseEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private long id;
+
+    @Column(name = "name", nullable = false)
     private String name;
+
+    @Column(name = "day", nullable = false)
     private Day day;
+
+    @Column(name = "start", nullable = false)
     private LocalTime start;
+
+    @Column(name = "ende", nullable = false)
     private LocalTime ende;
 
-    public Course(long id, String name, Day day, LocalTime start, LocalTime ende) {
+    public CourseEntity(long id, String name, Day day, LocalTime start, LocalTime ende) {
         this.id = id;
         this.name = name;
         this.day = day;
@@ -17,12 +33,12 @@ public class Course {
         this.ende = ende;
     }
 
-    public long getId() {
-        return id;
+    protected CourseEntity(){
+
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public long getId() {
+        return id;
     }
 
     public String getName() {

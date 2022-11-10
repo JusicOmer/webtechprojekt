@@ -11,11 +11,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-public class FachRestController {
+public class CourseRestController {
 
     private List<Course> courses;
 
-    public FachRestController(){
+    public CourseRestController(){
         courses = new ArrayList<>();
         courses.add(new Course(1, "Mathe", Day.Montag, LocalTime.of(8,00), LocalTime.of(9,30)));
         courses.add(new Course(2, "Englisch", Day.Dienstag, LocalTime.of(10,00), LocalTime.of(11,30)));
