@@ -17,6 +17,7 @@ public class CourseEntity {
     private String name;
 
     @Column(name = "day", nullable = false)
+    //@Enumerated(value = EnumType.STRING)
     private Day day;
 
     @Column(name = "start", nullable = false)
