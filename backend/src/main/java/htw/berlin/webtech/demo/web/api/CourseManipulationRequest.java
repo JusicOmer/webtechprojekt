@@ -15,6 +15,8 @@ public class CourseManipulationRequest {
         this.ende = ende;
     }
 
+    public CourseManipulationRequest(){}
+
     public String getName() {
         return name;
     }
