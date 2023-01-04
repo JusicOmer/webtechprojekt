@@ -45,6 +45,7 @@ public class CourseService {
         courseEntity.setEnde(request.getEnde());
         courseEntity.setName(request.getName());
         courseEntity.setStart(request.getStart());
+        courseEntity = courseRepository.save(courseEntity);
 
         return transformEntity(courseEntity);
     }
