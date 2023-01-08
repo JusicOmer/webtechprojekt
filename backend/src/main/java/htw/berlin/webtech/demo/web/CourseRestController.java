@@ -6,6 +6,7 @@ import htw.berlin.webtech.demo.web.api.CourseManipulationRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -41,9 +42,15 @@ public class CourseRestController {
 
     @PostMapping(path = "/api/v1/courses")
     public ResponseEntity<List<Course>> createCourses(@RequestBody CourseManipulationRequest request) throws URISyntaxException {
-        var course = courseService.create(request);
-        URI uri = new URI("/api/v1/courses" + course.getId());
-        return ResponseEntity.created(uri).build();
+        var valid = validate(request);
+        if (valid) {
+            var course = courseService.create(request);
+            URI uri = new URI("/api/v1/courses" + course.getId());
+            return ResponseEntity.created(uri).build();
+        }
+        else {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @PutMapping(path = "/api/v1/courses/{id}")
@@ -56,5 +63,16 @@ public class CourseRestController {
     public ResponseEntity<Void> deleteCourse(@PathVariable Long id){
         boolean successful = courseService.deleteById(id);
         return successful ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
+    }
+
+    private boolean validate(CourseManipulationRequest request){
+        return request.getName() != null
+                && !request.getName().isBlank()
+                && request.getDay() != null
+                && !request.getDay().toString().isBlank() &&
+                request.getStart() != null
+                && !request.getStart().toString().isBlank() &&
+                request.getEnde() != null
+                && !request.getEnde().toString().isBlank();
     }
 }

@@ -1,11 +1,16 @@
 package htw.berlin.webtech.demo.web.api;
 
+import javax.validation.constraints.NotBlank;
 import java.time.LocalTime;
 
 public class CourseManipulationRequest {
+    @NotBlank(message = "Please fill in the blank.")
     private String name;
+    @NotBlank(message = "Please fill in the blank.")
     private Day day;
+    @NotBlank
     private LocalTime start;
+    @NotBlank
     private LocalTime ende;
 
     public CourseManipulationRequest(String name, Day day, LocalTime start, LocalTime ende) {
