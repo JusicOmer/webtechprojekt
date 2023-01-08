@@ -11,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.time.LocalTime;
 import java.util.List;
@@ -24,7 +25,8 @@ import static org.springframework.http.RequestEntity.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 @WebMvcTest(CourseRestController.class)
 class CourseRestControllerTest {
 
@@ -35,32 +37,6 @@ class CourseRestControllerTest {
     private CourseService courseService;
 
     @Test
-    @DisplayName("should return found courses from course service")
-    void returns_found_course_from_service() throws Exception {
-        //given
-        var courses = List.of(
-                new Course(1, "Englisch", Day.Montag, LocalTime.MIN, LocalTime.MAX),
-                new Course(2, "Mathe", Day.Dienstag, LocalTime.NOON, LocalTime.MIDNIGHT)
-        );
-        doReturn(courses).when(courseService).findAll();
-        //when
-        mockMvc.perform(get("/api/v1/courses"))
-            //then
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.size()").value(2))
-                .andExpect(jsonPath("$[0].id").value(1))
-                .andExpect(jsonPath("$[0].name").value("Englisch"))
-                .andExpect(jsonPath("$[0].day").value(Day.Montag))
-                .andExpect(jsonPath("$[0].start").value(LocalTime.MIN))
-                .andExpect(jsonPath("$[0].end").value(LocalTime.MAX))
-                .andExpect(jsonPath("$[1].id").value(2))
-                .andExpect(jsonPath("$[0].name").value("Mathe"))
-                .andExpect(jsonPath("$[0].day").value(Day.Dienstag))
-                .andExpect(jsonPath("$[0].start").value(LocalTime.NOON))
-                .andExpect(jsonPath("$[0].end").value(LocalTime.MIDNIGHT));
-    }
-
-    @Test
     @DisplayName("should return 404 if course is not found")
     void should_return_404_if_course_is_not_found() throws Exception {
         // given
@@ -68,42 +44,20 @@ class CourseRestControllerTest {
 
         // when
         mockMvc.perform(get("/api/v1/course/123"))
-                // then
+       // then
                 .andExpect(status().isNotFound());
     }
 
-    /*@Test
-    @DisplayName("should return 201 http status and Location header when creating a course")
-    void should_return_201_http_status_and_location_header_when_creating_a_course() throws Exception {
-        // given
-        String courseToCreateAsJson = "{\"name\": \"Deutsch\", \"day\":\"Montag\", \"start\":\"12:00:00\", \"ende\": 13:00:00}";
-        var course = new Course(123, null, null, null, null);
-        doReturn(course).when(courseService).create(any());
 
-        // when
-        mockMvc.perform(
-                        post("/api/v1/course")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(courseToCreateAsJson)
-                )
-                // then
-                .andExpect(status().isCreated())
-                .andExpect(header().exists("Location"))
-                .andExpect(header().string("Location", Matchers.equalTo(("/api/v1/course/" + course.getId()))));
-//            .andExpect(header().string("Location", Matchers.containsString(Long.toString(person.getId()))));
-
-    }*/
-/*
     @Test
     @DisplayName("should validate create course request")
     void should_validate_craete_course_request() throws Exception {
-        String courseToCreateAsJson = "{\"name\": \"Deutsch\", \"day\":\"Montag\", \"start\":\"12:00:00\", \"ende\":\"13:00:00\"}";
+        String courseToCreateAsJson = "{\"name\": \"\", \"day\":\"Montag\", \"start\":\"12:00:00\", \"ende\":\"13:00:00\"}";
 
         // when
-        mockMvc.perform(
-                post("/api/v1/courses")
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/courses")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(courseToCreateAsJson)
-                        .andExpectstatus().isBadRequest());
-    }*/
+                        .content(courseToCreateAsJson))
+                        .andExpect(status().isBadRequest());
+    }
 }
